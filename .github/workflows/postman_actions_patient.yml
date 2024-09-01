@@ -31,7 +31,7 @@ jobs:
 
       # Postman Collection Execution and Report Generation
       - name: Execute the postman collection
-        run: newman run Crisp\ Patient\ Details.postman_collection.json -r htmlextra,cli
+        run: newman run Crisp\ Patient\ Details.postman_collection.json -e -r htmlextra,cli
 
       - name: Archive the HTML Report
         if: always()
