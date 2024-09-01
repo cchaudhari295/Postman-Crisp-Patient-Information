@@ -128,12 +128,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Id={{Id}}",
-					"protocol": "https",
+					"raw": "{{BASE_URL}}/patients/query/?Id={{Id}}",
 					"host": [
-						"apimgmt-dev-crisp",
-						"azure-api",
-						"net"
+						"{{BASE_URL}}"
 					],
 					"path": [
 						"patients",
@@ -584,12 +581,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?DateOfBirth={{DateOfBirth}}",
-					"protocol": "https",
+					"raw": "{{BASE_URL}}/patients/query/?DateOfBirth={{DateOfBirth}}",
 					"host": [
-						"apimgmt-dev-crisp",
-						"azure-api",
-						"net"
+						"{{BASE_URL}}"
 					],
 					"path": [
 						"patients",
