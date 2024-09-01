@@ -1,0 +1,610 @@
+{
+	"info": {
+		"_postman_id": "8753f7ac-0dbe-4182-a455-5f323f5f0c25",
+		"name": "Crisp Patient Details",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5447556"
+	},
+	"item": [
+		{
+			"name": "GetPatientDetailsByIDRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"// pm.variables.set(\"Id\",111);\r",
+							"pm.variables.set(\"Id\",444);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody=pm.response.json();\r",
+							"console.log(responseBody[0].Name);\r",
+							"//const patientDetails = [\"111\", \"Jenn D.\", \"1934-06-01\",\"CA\"];\r",
+							"\r",
+							"const patientDetails = [\"444\", \"Ross C.\", \"2000-03-01\",\"Valley State\"];\r",
+							"\r",
+							"pm.test(\"Verify the details when valid Id is passed\",function(){\r",
+							"   pm.expect(parseInt(responseBody[0].Id),10).to.be.equal(pm.variables.get(\"Id\"));\r",
+							"   pm.expect(responseBody[0].Name).to.be.equal(patientDetails[1]);\r",
+							"   pm.expect(responseBody[0].DateOfBirth).to.be.equal(patientDetails[2]);\r",
+							"   pm.expect(responseBody[0].Address).to.be.equal(patientDetails[3]);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Verify if the status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if the response time is less than 300ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Id={{Id}}",
+					"protocol": "https",
+					"host": [
+						"apimgmt-dev-crisp",
+						"azure-api",
+						"net"
+					],
+					"path": [
+						"patients",
+						"query",
+						""
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "{{Id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPatientDetailsByIInvalidDRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"    //invalid Id\r",
+							"    pm.variables.set(\"Id\",123);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody=pm.response.json();\r",
+							"\r",
+							"let test;\r",
+							"pm.test(\"Verify when invalid Id is passed\", function () {\r",
+							"    pm.expect(responseBody[0]).to.have.property('Id');\r",
+							"    test=true;\r",
+							"});\r",
+							"\r",
+							"if(test){\r",
+							"\r",
+							"pm.test(\"Verify the error message when Id is invalid\", function () {\r",
+							"    pm.expect(responseBody[0].DateOfBirth).to.equal(\"Invalid Id is provided\");\r",
+							"});\r",
+							"}\r",
+							"   \r",
+							"pm.test(\"Verify if the status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Id={{Id}}",
+					"protocol": "https",
+					"host": [
+						"apimgmt-dev-crisp",
+						"azure-api",
+						"net"
+					],
+					"path": [
+						"patients",
+						"query",
+						""
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "{{Id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPatientDetailsByNameRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"    pm.variables.set(\"Name\",\"Jack\")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody=pm.response.json();\r",
+							"console.log(responseBody)\r",
+							"console.log(responseBody[0].Name);\r",
+							"pm.variables.set(\"Name\",\"Jack\");\r",
+							"pm.variables.set(\"Id\",222);\r",
+							"pm.variables.set(\"DateOfBirth\",\"1956-05-01\");\r",
+							"pm.variables.set(\"Address\",\"MD\")\r",
+							"\r",
+							"pm.test(\"Verify the  response when Name is passed\",function(){\r",
+							"   pm.expect(responseBody[0].Name).to.be.equal(pm.variables.get(\"Name\"));\r",
+							"   pm.expect(parseInt(responseBody[0].Id),10).to.be.equal(pm.variables.get(\"Id\"));\r",
+							"   pm.expect(responseBody[0].DateOfBirth).to.be.equal(pm.variables.get(\"DateOfBirth\"));\r",
+							"   pm.expect(responseBody[0].Address).to.be.equal(pm.variables.get(\"Address\"));\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 300ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Name={{Name}}",
+					"protocol": "https",
+					"host": [
+						"apimgmt-dev-crisp",
+						"azure-api",
+						"net"
+					],
+					"path": [
+						"patients",
+						"query",
+						""
+					],
+					"query": [
+						{
+							"key": "Name",
+							"value": "{{Name}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPatientDetailsByInvalidNameRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"//Invalid name\r",
+							"    pm.variables.set(\"Name\",\"Tina\");\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"let test;\r",
+							"pm.test(\"Verify when the response is empty\", function () {\r",
+							"    pm.expect(responseBody[0].Name, 'Name is not available').to.not.be.undefined;\r",
+							"    test = false;\r",
+							"});\r",
+							"\r",
+							"if (test) {\r",
+							"    pm.test(\"Verify the error message when Name is invalid\", function () {\r",
+							"        pm.expect(responseBody[0].Name).to.equal(\"Invalid Name is provided\");\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Verify if the status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Name={{Name}}",
+					"protocol": "https",
+					"host": [
+						"apimgmt-dev-crisp",
+						"azure-api",
+						"net"
+					],
+					"path": [
+						"patients",
+						"query",
+						""
+					],
+					"query": [
+						{
+							"key": "Name",
+							"value": "{{Name}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPatientDetailsByAddressRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"    pm.variables.set(\"Address\",\"CA\")\r",
+							"   //pm.variables.set(\"Address\",\"CA State\")\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"// pm.variables.set(\"Name\",\"Bernard\");\r",
+							"// pm.variables.set(\"Id\",333);\r",
+							"// pm.variables.set(\"DateOfBirth\",\"1966-04-01\");\r",
+							"// pm.variables.set(\"Address\",\"CA State\")\r",
+							"\r",
+							"pm.variables.set(\"Name\", \"Jenn D.\");\r",
+							"pm.variables.set(\"Id\", 111);\r",
+							"pm.variables.set(\"DateOfBirth\", \"1934-06-01\");\r",
+							"pm.variables.set(\"Address\", \"CA\")\r",
+							"\r",
+							"try {\r",
+							"    pm.test(\"Verify the  response when Address is passed\", function () {\r",
+							"        pm.expect(responseBody[0].Name).to.be.equal(pm.variables.get(\"Name\"));\r",
+							"        pm.expect(parseInt(responseBody[0].Id), 10).to.be.equal(pm.variables.get(\"Id\"));\r",
+							"        pm.expect(responseBody[0].DateOfBirth).to.be.equal(pm.variables.get(\"DateOfBirth\"));\r",
+							"        pm.expect(responseBody[0].Address).to.be.equal(pm.variables.get(\"Address\"));\r",
+							"\r",
+							"    })\r",
+							"}\r",
+							"catch (err) {\r",
+							"    console.log(err)\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 300ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Address={{Address}}",
+					"protocol": "https",
+					"host": [
+						"apimgmt-dev-crisp",
+						"azure-api",
+						"net"
+					],
+					"path": [
+						"patients",
+						"query",
+						""
+					],
+					"query": [
+						{
+							"key": "Address",
+							"value": "{{Address}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPatientDetailsByInvalidAddressRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"let test;\r",
+							"pm.test(\"Verify when invalid response is passed\", function () {\r",
+							"    pm.expect(responseBody[0]).to.have.property('Address');\r",
+							"    test=true;\r",
+							"});\r",
+							"\r",
+							"if(test){\r",
+							"pm.test(\"Address is a string\", function () {\r",
+							"    pm.expect(responseBody[0].Address).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify the error message when address is invalid\", function () {\r",
+							"    pm.expect(responseBody[0].Address).to.equal(\"Invalid address is provided\");\r",
+							"});\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"    pm.variables.set(\"Address\",\"AL\")\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Address={{Address}}",
+					"protocol": "https",
+					"host": [
+						"apimgmt-dev-crisp",
+						"azure-api",
+						"net"
+					],
+					"path": [
+						"patients",
+						"query",
+						""
+					],
+					"query": [
+						{
+							"key": "Address",
+							"value": "{{Address}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPatientDetailsByValidDateOfBirthRequest",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"    pm.variables.set(\"DateOfBirth\",\"1966-04-01\")\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"pm.variables.set(\"Name\", \"Bernard\");\r",
+							"pm.variables.set(\"Id\", 333);\r",
+							"pm.variables.set(\"DateOfBirth\", \"1966-04-01\");\r",
+							"pm.variables.set(\"Address\", \"CA State\")\r",
+							"\r",
+							"try {\r",
+							"    pm.test(\"Verify the  response when date of birth is passed\", function () {\r",
+							"        pm.expect(responseBody[0].DateOfBirth).to.be.equal(pm.variables.get(\"DateOfBirth\"));\r",
+							"        pm.expect(responseBody[0].Name).to.be.equal(pm.variables.get(\"Name\"));\r",
+							"        pm.expect(parseInt(responseBody[0].Id), 10).to.be.equal(pm.variables.get(\"Id\"));\r",
+							"        pm.expect(responseBody[0].Address).to.be.equal(pm.variables.get(\"Address\"));\r",
+							"    })\r",
+							"}\r",
+							"catch (err) {\r",
+							"    console.log(err)\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 300ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?DateOfBirth={{DateOfBirth}}",
+					"protocol": "https",
+					"host": [
+						"apimgmt-dev-crisp",
+						"azure-api",
+						"net"
+					],
+					"path": [
+						"patients",
+						"query",
+						""
+					],
+					"query": [
+						{
+							"key": "DateOfBirth",
+							"value": "{{DateOfBirth}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPatientDetailsByInvalidDateOfBirthRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"let test;\r",
+							"pm.test(\"Verify when invalid DateOfBirth is passed\", function () {\r",
+							"    pm.expect(responseBody[0]).to.have.property('DateOfBirth');\r",
+							"    test=true;\r",
+							"});\r",
+							"\r",
+							"if(test){\r",
+							"pm.test(\"DateOfBirth is a string\", function () {\r",
+							"    pm.expect(responseBody[0].DateOfBirth).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify the error message when DateOfBirth is invalid\", function () {\r",
+							"    pm.expect(responseBody[0].DateOfBirth).to.equal(\"Invalid DateOfBirth is provided\");\r",
+							"});\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"    pm.variables.set(\"DateOfBirth\",\"1926-05-01\")\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?DateOfBirth={{DateOfBirth}}",
+					"protocol": "https",
+					"host": [
+						"apimgmt-dev-crisp",
+						"azure-api",
+						"net"
+					],
+					"path": [
+						"patients",
+						"query",
+						""
+					],
+					"query": [
+						{
+							"key": "DateOfBirth",
+							"value": "{{DateOfBirth}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
