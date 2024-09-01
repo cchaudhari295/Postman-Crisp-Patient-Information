@@ -31,9 +31,10 @@ jobs:
 
       # Postman Collection Execution and Report Generation
       - name: Execute the postman collection
-        run:  newman run Crisp\ Patient\ Details.postman_collection.json -r htmlextra,cli
+        run: newman run Crisp\ Patient\ Details.postman_collection.json -r htmlextra,cli
 
       - name: Archive the HTML Report
+        if: always()
         uses: actions/upload-artifact@v3.2.0-node20
         with:
           name: Postman Test Report
