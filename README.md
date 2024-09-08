@@ -1,4 +1,4 @@
-**Tests**
+**Information about the Postman Tests**
 
 **API endpoint:**
 GET https://apimgmt-dev-crisp.azure-api.net/patients/query
