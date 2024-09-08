@@ -20,6 +20,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout the postman collection
+        uses: actions/checkout@v4
+        
+      # Setup the NodeJS Env for the github runner
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4.0.3
         with:
@@ -31,7 +35,7 @@ jobs:
 
       # Postman Collection Execution and Report Generation
       - name: Execute the postman collection
-        run: newman run Crisp\ Patient\ Details.postman_collection.json -r cli,htmlextra
+        run: newman run Crisp\ Patient\ Details.postman_collection.json -e QA\ Crisp\ Patient\ Details.postman_environment.json -r cli,htmlextra
 
       - name: Archive the HTML Report
         if: always()
