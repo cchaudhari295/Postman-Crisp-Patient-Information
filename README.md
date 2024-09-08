@@ -12,7 +12,7 @@ GET https://apimgmt-dev-crisp.azure-api.net/patients/query
 | 222 | Jack       | 1956-05-01 | MD            |
 | 333 | Bernard    | 1966-04-01 | CA State      |
 | 444 | Ross C.    | 2000-03-01 | Valley State  |  
-
+  
 - Below postman tests are present to test the API endpoint -:  
 
 **1. GetPatientDetailsByIDRequest**
