@@ -1,8 +1,8 @@
-**Integrated Postman Tests With Github Actions and Generated HTML Report**
+**Integrated Postman Tests With Github Actions and Generated HTML Report**  
 
 
 **API endpoint:**
-GET https://apimgmt-dev-crisp.azure-api.net/patients/query
+GET https://apimgmt-dev-crisp.azure-api.net/patients/query  
 
 **Query Parameters / Data**
 
@@ -13,7 +13,7 @@ GET https://apimgmt-dev-crisp.azure-api.net/patients/query
 | 333 | Bernard    | 1966-04-01 | CA State      |
 | 444 | Ross C.    | 2000-03-01 | Valley State  |
 
--Below postman tests are present to test the API endpoint -:
+-Below postman tests are present to test the API endpoint -:  
 
 **1. GetPatientDetailsByIDRequest**
 
@@ -81,7 +81,7 @@ Test 2: Verify whether DateOfBirth is a string
 
 Test 3: Verify the error message when DateOfBirth is invalid
 
-Test 4: Verify if the status code is 400
+Test 4: Verify if the status code is 400  
 
 **HTML REPORT**
 - To see the report, follow below steps-:
