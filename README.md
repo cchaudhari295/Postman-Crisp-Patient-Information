@@ -1,4 +1,4 @@
-**Information about the Postman Tests**
+**Integrated Postman Tests With Github Actions and Generate HTML Report**
 
 **API endpoint:**
 GET https://apimgmt-dev-crisp.azure-api.net/patients/query
@@ -81,3 +81,10 @@ Test 2: Verify whether DateOfBirth is a string
 Test 3: Verify the error message when DateOfBirth is invalid
 
 Test 4: Verify if the status code is 400
+
+**HTML REPORT**
+- To see the report, follow below steps-:
+    1. Click on Actions.
+    2. Click on the latest workflow run link.
+    3. Click on Postman Test Report present in Artifacts section. The report will be downloaded on your system.
+    4. Open the HTML report and observe the test results.
