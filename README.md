@@ -31,7 +31,7 @@ Test 2: Verify the error message when Id is invalid
 
 Test 3: Verify if the status code is 400
 
-**GetPatientDetailsByNameRequest**
+**3. GetPatientDetailsByNameRequest**
 
 Test 1: Verify the details when Name is passed
 
@@ -39,7 +39,7 @@ Test 2: Verify if the status code is 200
 
 Test 3: Verify if the response time is less than 300ms
 
-**GetPatientDetailsByInvalidNameRequest**
+**4. GetPatientDetailsByInvalidNameRequest**
 
 Test 1: Verify if the Name is undefined
 
@@ -47,7 +47,7 @@ Test 2: Verify the error message when Name is invalid
 
 Test 3: Verify if the status code is 400
 
-**GetPatientDetailsByAddressRequest**
+**5. GetPatientDetailsByAddressRequest**
 
 Test 1: Verify the details when Address is provided
 
@@ -55,7 +55,7 @@ Test 2 : Verify if the status code is 200
 
 Test 3: Verify if the response time is less than 300ms 
 
-**GetPatientDetailsByInvalidAddressRequest**
+**6. GetPatientDetailsByInvalidAddressRequest**
 
 Test 1: Verify when invalid address is provided
 
@@ -65,7 +65,7 @@ Test 3: Verify the error message when address is invalid
 
 Test 4: Verify if the status code is 400
 
-**GetPatientDetailsByValidDateOfBirthRequest**
+**7. GetPatientDetailsByValidDateOfBirthRequest**
 
 Test 1: Verify the details when date of birth is passed
 
@@ -73,7 +73,7 @@ Test 2 : Verify if the status code is 200
 
 Test 3: Verify if the response time is less than 300ms 
 
-**GetPatientDetailsByInvalidDateOfBirthRequest**
+**8. GetPatientDetailsByInvalidDateOfBirthRequest**
 
 Test 1: Verify when invalid DateOfBirth is passed
 
@@ -81,7 +81,8 @@ Test 2: Verify whether DateOfBirth is a string
 
 Test 3: Verify the error message when DateOfBirth is invalid
 
-Test 4: Verify if the status code is 400  
+Test 4: Verify if the status code is 400    
+  
 
 **HTML REPORT**
 - To see the report, follow below steps-:
