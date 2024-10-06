@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project demonstrates how to execute Postman collections using **Newman** along with the **QA environment**. It also includes automated test execution through **GitHub Actions** for continuous integration, ensuring your API tests are run on every push or pull request.
+This project demonstrates how to execute Postman collections using **Newman** along with the **QA environment**. It also includes automated test execution through **GitHub Actions** for continuous integration, ensuring your API tests are run on every push request.
 
 ## Author
 
@@ -48,7 +48,7 @@ Replace the placeholders:
 
 ## Automated Execution with GitHub Actions
 
-For continuous integration, GitHub Actions is configured to automatically run tests on each push and pull request to the main branch.
+For continuous integration, GitHub Actions is configured to automatically run tests on each push request to the main branch.
 - To view the report, follow these steps:
 1. Go to the Actions tab.
 2. Select the link for the latest workflow run.
