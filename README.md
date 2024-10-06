@@ -1,92 +1,50 @@
-**Integrated Postman Tests With Github Actions and Generated HTML Report**  
+# API Test Automation with Postman and GitHub Actions
 
+## Overview
 
-**API endpoint:**
-GET https://apimgmt-dev-crisp.azure-api.net/patients/query  
+This project demonstrates how to execute Postman collections using **Newman** along with the **QA environment**. It also includes automated test execution through **GitHub Actions** for continuous integration, ensuring your API tests are run on every push or pull request.
 
-**Query Parameters / Data**
+## Authors
 
-| ID  | Name       | Date       | Location      |
-|-----|------------|------------|---------------|
-| 111 | Jenn D.    | 1934-06-01 | CA            |
-| 222 | Jack       | 1956-05-01 | MD            |
-| 333 | Bernard    | 1966-04-01 | CA State      |
-| 444 | Ross C.    | 2000-03-01 | Valley State  |  
+- Chaitali SDET with 10 years of experience in Automation Testing for UI-API-Mobile 
+- [GitHub](https://github.com/cchaudhari295)
   
-- Below postman tests are present to test the API endpoint -:  
+## Features
 
-**1. GetPatientDetailsByIDRequest**
-
-Test 1: Verify the details when valid ID is passed.
-
-Test 2: Verify if the status code is 200
-
-Test 3: Verify if the response time is less than 300ms
-
-**2. GetPatientDetailsByIInvalidDRequest**
-
-Test 1: Verify if the property 'Id' is present in the response
-
-Test 2: Verify the error message when Id is invalid
-
-Test 3: Verify if the status code is 400
-
-**3. GetPatientDetailsByNameRequest**
-
-Test 1: Verify the details when Name is passed
-
-Test 2: Verify if the status code is 200
-
-Test 3: Verify if the response time is less than 300ms
-
-**4. GetPatientDetailsByInvalidNameRequest**
-
-Test 1: Verify if the Name is undefined
-
-Test 2: Verify the error message when Name is invalid
-
-Test 3: Verify if the status code is 400
-
-**5. GetPatientDetailsByAddressRequest**
-
-Test 1: Verify the details when Address is provided
-
-Test 2 : Verify if the status code is 200
-
-Test 3: Verify if the response time is less than 300ms 
-
-**6. GetPatientDetailsByInvalidAddressRequest**
-
-Test 1: Verify when invalid address is provided
-
-Test 2: Verify if the Address is a string
-
-Test 3: Verify the error message when address is invalid
-
-Test 4: Verify if the status code is 400
-
-**7. GetPatientDetailsByValidDateOfBirthRequest**
-
-Test 1: Verify the details when date of birth is passed
-
-Test 2 : Verify if the status code is 200
-
-Test 3: Verify if the response time is less than 300ms 
-
-**8. GetPatientDetailsByInvalidDateOfBirthRequest**
-
-Test 1: Verify when invalid DateOfBirth is passed
-
-Test 2: Verify whether DateOfBirth is a string
-
-Test 3: Verify the error message when DateOfBirth is invalid
-
-Test 4: Verify if the status code is 400    
+Tested api on following paramaters-:
+- Response Time
+- Status Code
+- Schema Validation
   
+## Prerequisites
 
-**HTML REPORT**
-- To see the report, follow below steps-:
-    1. Click on Actions.
-    2. Click on the latest workflow run link.
-    3. Click on Postman Test Report present in Artifacts section. The report will be downloaded on your system.
-    4. Open the HTML report and observe the test results.
+To get started, ensure the following tools are installed:
+
+- [Node.js](https://nodejs.org/)
+- [Newman](https://www.npmjs.com/package/newman)
+- [Newman-HTML Extra](https://www.npmjs.com/package/newman-reporter-htmlextra)
+
+## Running the Collection Locally
+
+To execute the Postman collection locally using the **QA environment file**, follow these steps:
+
+1. Install Newman and Newman-HTML Extra globally on your system:
+
+   ```bash
+   npm install -g newman newman-reporter-htmlextra
+
+2. Run the collection on your terminal using the following command:
+
+   ```bash
+   newman run <path_to_collection.json> -e <path_to_QA_environment.json> --reporters cli,htmlextra
+
+Replace the placeholders:
+  <path_to_collection.json>: Path to your Postman collection file
+  <path_to_QA_environment.json>: Path to your Postman environment file
+
+ This will execute collection with the specified environment and generate a test report in both the CLI and HTML formats.
+
+## Automated Execution with GitHub Actions
+
+For continuous integration, GitHub Actions is configured to automatically run tests on each push and pull request to the main branch.
+
