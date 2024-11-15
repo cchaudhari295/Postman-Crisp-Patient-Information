@@ -1,83 +1,56 @@
-**Information about the Postman Tests**
+# API Test Automation with Postman and GitHub Actions
 
-**API endpoint:**
-GET https://apimgmt-dev-crisp.azure-api.net/patients/query
+## Overview
 
-**Query Parameters / Data**
+This project demonstrates how to execute Postman collections using **Newman** along with the **QA environment**. It also includes automated test execution through **GitHub Actions** for continuous integration, ensuring your API tests are run on every push request.
 
-| ID  | Name       | Date       | Location      |
-|-----|------------|------------|---------------|
-| 111 | Jenn D.    | 1934-06-01 | CA            |
-| 222 | Jack       | 1956-05-01 | MD            |
-| 333 | Bernard    | 1966-04-01 | CA State      |
-| 444 | Ross C.    | 2000-03-01 | Valley State  |
+## Author
 
---Below postman tests are present to test the API endpoint -:
+- Chaitali SDET with 10 years of experience in Automation Testing for UI-API-Mobile
+- [LinkedIn](https://www.linkedin.com/in/chaitali-chaudhari-a2b850177/)
+- [GitHub](https://github.com/cchaudhari295)
+- EmailID: chaitali1.chaudhari@gmail.com
+  
+## Features
 
-**1. GetPatientDetailsByIDRequest**
+Tested API on following paramaters-:
+- Response Time
+- Status Code
+- Schema Validation
+  
+## Prerequisites
 
-Test 1: Verify the details when valid ID is passed.
+To get started, ensure the following tools are installed:
 
-Test 2: Verify if the status code is 200
+- [Node.js](https://nodejs.org/)
+- [Newman](https://www.npmjs.com/package/newman)
+- [Newman-HTML Extra](https://www.npmjs.com/package/newman-reporter-htmlextra)
 
-Test 3: Verify if the response time is less than 300ms
+## Running the Collection Locally
 
-**2. GetPatientDetailsByIInvalidDRequest**
+To execute the Postman collection locally using the **QA environment file**, follow these steps:
 
-Test 1: Verify if the property 'Id' is present in the response
+1. Install Newman and Newman-HTML Extra globally on your system:
 
-Test 2: Verify the error message when Id is invalid
+   ```bash
+   npm install -g newman newman-reporter-htmlextra
 
-Test 3: Verify if the status code is 400
+2. Run the collection on your terminal using the following command:
 
-**GetPatientDetailsByNameRequest**
+   ```bash
+   newman run <path_to_collection.json> -e <path_to_QA_environment.json> --reporters cli,htmlextra
 
-Test 1: Verify the details when Name is passed
+Replace the placeholders:
+  <path_to_collection.json>: Path to your Postman collection file
+  <path_to_QA_environment.json>: Path to your Postman environment file
 
-Test 2: Verify if the status code is 200
+ This will execute collection with the specified environment and generate a test report in both the CLI and HTML formats.
 
-Test 3: Verify if the response time is less than 300ms
+## Automated Execution with GitHub Actions
 
-**GetPatientDetailsByInvalidNameRequest**
-
-Test 1: Verify if the Name is undefined
-
-Test 2: Verify the error message when Name is invalid
-
-Test 3: Verify if the status code is 400
-
-**GetPatientDetailsByAddressRequest**
-
-Test 1: Verify the details when Address is provided
-
-Test 2 : Verify if the status code is 200
-
-Test 3: Verify if the response time is less than 300ms 
-
-**GetPatientDetailsByInvalidAddressRequest**
-
-Test 1: Verify when invalid address is provided
-
-Test 2: Verify if the Address is a string
-
-Test 3: Verify the error message when address is invalid
-
-Test 4: Verify if the status code is 400
-
-**GetPatientDetailsByValidDateOfBirthRequest**
-
-Test 1: Verify the details when date of birth is passed
-
-Test 2 : Verify if the status code is 200
-
-Test 3: Verify if the response time is less than 300ms 
-
-**GetPatientDetailsByInvalidDateOfBirthRequest**
-
-Test 1: Verify when invalid DateOfBirth is passed
-
-Test 2: Verify whether DateOfBirth is a string
-
-Test 3: Verify the error message when DateOfBirth is invalid
-
-Test 4: Verify if the status code is 400
+For continuous integration, GitHub Actions is configured to automatically run tests on each push request to the master branch.
+- To view the report, follow these steps:
+1. Go to the Actions tab.
+2. Select the link for the latest workflow run.
+3. In the Artifacts section, click on Postman Test Report to download the report to your system.
+4. Open the downloaded HTML report to review the test results.
