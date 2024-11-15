@@ -13,9 +13,8 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
+							"pm.collectionVariables.set(\"patientId\",pm.iterationData.get('Id'));\r",
 							"\r",
-							"// pm.variables.set(\"Id\",111);\r",
-							"pm.variables.set(\"Id\",444);\r",
 							"\r",
 							""
 						],
@@ -27,18 +26,6 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var responseBody=pm.response.json();\r",
-							"console.log(responseBody[0].Name);\r",
-							"//const patientDetails = [\"111\", \"Jenn D.\", \"1934-06-01\",\"CA\"];\r",
-							"\r",
-							"const patientDetails = [\"444\", \"Ross C.\", \"2000-03-01\",\"Valley State\"];\r",
-							"\r",
-							"pm.test(\"Verify the details when valid Id is passed\",function(){\r",
-							"   pm.expect(parseInt(responseBody[0].Id),10).to.be.equal(pm.variables.get(\"Id\"));\r",
-							"   pm.expect(responseBody[0].Name).to.be.equal(patientDetails[1]);\r",
-							"   pm.expect(responseBody[0].DateOfBirth).to.be.equal(patientDetails[2]);\r",
-							"   pm.expect(responseBody[0].Address).to.be.equal(patientDetails[3]);\r",
-							"})\r",
 							"\r",
 							"pm.test(\"Verify if the status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
@@ -46,7 +33,56 @@
 							"\r",
 							"pm.test(\"Verify if the response time is less than 300ms\", function () {\r",
 							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
-							"});"
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields - Id, Name, DateOfBirth, and Address\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(patient) {\r",
+							"        pm.expect(patient).to.include.all.keys('Id', 'Name', 'DateOfBirth', 'Address');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Id is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(patient){\r",
+							"    pm.expect(patient.Id).to.be.a('string').and.to.have.lengthOf.at.least(1);\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"DateOfBirth is in a valid date format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    responseData.forEach(function(patient) {\r",
+							"        pm.expect(patient.DateOfBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Address is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(patient) {\r",
+							"    pm.expect(patient.Address).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Address should not be empty\");\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Patient name matches the test data\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    responseData.forEach(function (patient) {\r",
+							"        pm.expect(patient.Name).to.be.equal(pm.iterationData.get(\"Name\"));\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -57,12 +93,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Id={{Id}}",
-					"protocol": "https",
+					"raw": "{{BASE_URL}}/patients/query/?Id={{patientId}}",
 					"host": [
-						"apimgmt-dev-crisp",
-						"azure-api",
-						"net"
+						"{{BASE_URL}}"
 					],
 					"path": [
 						"patients",
@@ -72,7 +105,7 @@
 					"query": [
 						{
 							"key": "Id",
-							"value": "{{Id}}"
+							"value": "{{patientId}}"
 						}
 					]
 				}
@@ -88,6 +121,7 @@
 						"exec": [
 							"\r",
 							"    //invalid Id\r",
+							"    \r",
 							"    pm.variables.set(\"Id\",123);\r",
 							"\r",
 							""
@@ -154,9 +188,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"\r",
-							"\r",
-							"    pm.variables.set(\"Name\",\"Jack\")"
+							"pm.collectionVariables.set(\"patientName\",pm.iterationData.get(\"Name\"));"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -166,21 +198,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var responseBody=pm.response.json();\r",
-							"console.log(responseBody)\r",
-							"console.log(responseBody[0].Name);\r",
-							"pm.variables.set(\"Name\",\"Jack\");\r",
-							"pm.variables.set(\"Id\",222);\r",
-							"pm.variables.set(\"DateOfBirth\",\"1956-05-01\");\r",
-							"pm.variables.set(\"Address\",\"MD\")\r",
 							"\r",
-							"pm.test(\"Verify the  response when Name is passed\",function(){\r",
-							"   pm.expect(responseBody[0].Name).to.be.equal(pm.variables.get(\"Name\"));\r",
-							"   pm.expect(parseInt(responseBody[0].Id),10).to.be.equal(pm.variables.get(\"Id\"));\r",
-							"   pm.expect(responseBody[0].DateOfBirth).to.be.equal(pm.variables.get(\"DateOfBirth\"));\r",
-							"   pm.expect(responseBody[0].Address).to.be.equal(pm.variables.get(\"Address\"));\r",
-							"\r",
-							"})\r",
 							"\r",
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
@@ -188,7 +206,55 @@
 							"\r",
 							"pm.test(\"Response time is less than 300ms\", function () {\r",
 							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
-							"});"
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields - Id, Name, DateOfBirth, and Address\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(patient) {\r",
+							"        pm.expect(patient).to.include.all.keys('Id', 'Name', 'DateOfBirth', 'Address');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Id is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(patient){\r",
+							"    pm.expect(patient.Id).to.be.a('string').and.to.have.lengthOf.at.least(1);\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"DateOfBirth is in a valid date format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    responseData.forEach(function(patient) {\r",
+							"        pm.expect(patient.DateOfBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Address is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(patient) {\r",
+							"    pm.expect(patient.Address).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Address should not be empty\");\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Patient name matches the test data\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    responseData.forEach(function (patient) {\r",
+							"        pm.expect(patient.Name).to.be.equal(pm.iterationData.get(\"Name\"));\r",
+							"    });\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -199,12 +265,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Name={{Name}}",
-					"protocol": "https",
+					"raw": "{{BASE_URL}}/patients/query/?Name={{patientName}}",
 					"host": [
-						"apimgmt-dev-crisp",
-						"azure-api",
-						"net"
+						"{{BASE_URL}}"
 					],
 					"path": [
 						"patients",
@@ -214,7 +277,7 @@
 					"query": [
 						{
 							"key": "Name",
-							"value": "{{Name}}"
+							"value": "{{patientName}}"
 						}
 					]
 				}
@@ -297,11 +360,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"\r",
-							"\r",
-							"    pm.variables.set(\"Address\",\"CA\")\r",
-							"   //pm.variables.set(\"Address\",\"CA State\")\r",
-							""
+							"pm.collectionVariables.set(\"patientAddress\",pm.iterationData.get(\"Address\"));"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -311,30 +370,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var responseBody = pm.response.json();\r",
 							"\r",
-							"// pm.variables.set(\"Name\",\"Bernard\");\r",
-							"// pm.variables.set(\"Id\",333);\r",
-							"// pm.variables.set(\"DateOfBirth\",\"1966-04-01\");\r",
-							"// pm.variables.set(\"Address\",\"CA State\")\r",
 							"\r",
-							"pm.variables.set(\"Name\", \"Jenn D.\");\r",
-							"pm.variables.set(\"Id\", 111);\r",
-							"pm.variables.set(\"DateOfBirth\", \"1934-06-01\");\r",
-							"pm.variables.set(\"Address\", \"CA\")\r",
-							"\r",
-							"try {\r",
-							"    pm.test(\"Verify the details when Address is provided\", function () {\r",
-							"        pm.expect(responseBody[0].Name).to.be.equal(pm.variables.get(\"Name\"));\r",
-							"        pm.expect(parseInt(responseBody[0].Id), 10).to.be.equal(pm.variables.get(\"Id\"));\r",
-							"        pm.expect(responseBody[0].DateOfBirth).to.be.equal(pm.variables.get(\"DateOfBirth\"));\r",
-							"        pm.expect(responseBody[0].Address).to.be.equal(pm.variables.get(\"Address\"));\r",
-							"\r",
-							"    })\r",
-							"}\r",
-							"catch (error) {\r",
-							"    console.log(error)\r",
-							"}\r",
 							"\r",
 							"pm.test(\"Verify if the status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
@@ -342,7 +379,55 @@
 							"\r",
 							"pm.test(\"Verify if the response time is less than 300ms\", function () {\r",
 							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
-							"});"
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields - Id, Name, DateOfBirth, and Address\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(patient) {\r",
+							"        pm.expect(patient).to.include.all.keys('Id', 'Name', 'DateOfBirth', 'Address');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Id is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(patient){\r",
+							"    pm.expect(patient.Id).to.be.a('string').and.to.have.lengthOf.at.least(1);\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"DateOfBirth is in a valid date format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    responseData.forEach(function(patient) {\r",
+							"        pm.expect(patient.DateOfBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Address is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(patient) {\r",
+							"    pm.expect(patient.Address).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Address should not be empty\");\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Patient name matches the test data\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    responseData.forEach(function (patient) {\r",
+							"        pm.expect(patient.Name).to.be.equal(pm.iterationData.get(\"Name\"));\r",
+							"    });\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -353,7 +438,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Address={{Address}}",
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?Address={{patientAddress}}",
 					"protocol": "https",
 					"host": [
 						"apimgmt-dev-crisp",
@@ -368,7 +453,7 @@
 					"query": [
 						{
 							"key": "Address",
-							"value": "{{Address}}"
+							"value": "{{patientAddress}}"
 						}
 					]
 				}
@@ -457,10 +542,7 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"\r",
-							"\r",
-							"    pm.variables.set(\"DateOfBirth\",\"1966-04-01\")\r",
-							""
+							"pm.collectionVariables.set(\"patientDateOfBirth\",pm.iterationData.get(\"DateOfBirth\"));"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -470,32 +552,61 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var responseBody = pm.response.json();\r",
-							"\r",
-							"pm.variables.set(\"Name\", \"Bernard\");\r",
-							"pm.variables.set(\"Id\", 333);\r",
-							"pm.variables.set(\"DateOfBirth\", \"1966-04-01\");\r",
-							"pm.variables.set(\"Address\", \"CA State\")\r",
-							"\r",
-							"try {\r",
-							"    pm.test(\"Verify the details when date of birth is passed\", function () {\r",
-							"        pm.expect(responseBody[0].DateOfBirth).to.be.equal(pm.variables.get(\"DateOfBirth\"));\r",
-							"        pm.expect(responseBody[0].Name).to.be.equal(pm.variables.get(\"Name\"));\r",
-							"        pm.expect(parseInt(responseBody[0].Id), 10).to.be.equal(pm.variables.get(\"Id\"));\r",
-							"        pm.expect(responseBody[0].Address).to.be.equal(pm.variables.get(\"Address\"));\r",
-							"    })\r",
-							"}\r",
-							"catch (err) {\r",
-							"    console.log(err)\r",
-							"}\r",
-							"\r",
 							"pm.test(\"Verify if the status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Verify if the response time is less than 300ms\", function () {\r",
 							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
-							"});"
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the required fields - Id, Name, DateOfBirth, and Address\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(patient) {\r",
+							"        pm.expect(patient).to.include.all.keys('Id', 'Name', 'DateOfBirth', 'Address');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Id is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(patient){\r",
+							"    pm.expect(patient.Id).to.be.a('string').and.to.have.lengthOf.at.least(1);\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"DateOfBirth is in a valid date format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    responseData.forEach(function(patient) {\r",
+							"        pm.expect(patient.DateOfBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Address is a non-empty string\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('array');\r",
+							"  responseData.forEach(function(patient) {\r",
+							"    pm.expect(patient.Address).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Address should not be empty\");\r",
+							"  });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Patient name matches the test data\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    responseData.forEach(function (patient) {\r",
+							"        pm.expect(patient.Name).to.be.equal(pm.iterationData.get(\"Name\"));\r",
+							"    });\r",
+							"});\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -506,7 +617,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?DateOfBirth={{DateOfBirth}}",
+					"raw": "https://apimgmt-dev-crisp.azure-api.net/patients/query/?DateOfBirth={{patientDateOfBirth}}",
 					"protocol": "https",
 					"host": [
 						"apimgmt-dev-crisp",
@@ -521,7 +632,7 @@
 					"query": [
 						{
 							"key": "DateOfBirth",
-							"value": "{{DateOfBirth}}"
+							"value": "{{patientDateOfBirth}}"
 						}
 					]
 				}
@@ -599,6 +710,46 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "patientId",
+			"value": ""
+		},
+		{
+			"key": "patientName",
+			"value": ""
+		},
+		{
+			"key": "patientAddress",
+			"value": ""
+		},
+		{
+			"key": "patientDateOfBirth",
+			"value": ""
 		}
 	]
 }
